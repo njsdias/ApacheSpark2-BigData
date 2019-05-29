@@ -18,3 +18,6 @@ This course is appropriated for who have interest in learning a programming lang
 7. Intro Spark Streaming
 
 8. Intro to GraphX
+
+
+The first step is setup our environment. The instructions are in [Setup Environment](https://github.com/njsdias/ApacheSpark2-BigData/blob/master/SetupEnv.md).
