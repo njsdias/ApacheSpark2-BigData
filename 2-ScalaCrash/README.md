@@ -2,7 +2,7 @@
 
 Here we are working with LearningScala1.sc to LearningScala4.sc files that you can be founded in [ScalaSpark folder](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/SparkScala).
 
-For use these files create a new project scala and import the files as you did in the previous [example] (https://github.com/njsdias/ApacheSpark2-BigData/tree/master/1-HistRealMoviesRating).
+For use these files create a new project scala and import the files as you did in the previous [example](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/1-HistRealMoviesRating).
 
 # Types of variables and prints: LearningScala1.sc
 
@@ -31,23 +31,28 @@ The answer for the challenge of LearningScala1.sc is:
 
 The answer for the challenge (Fibonacci Sequence using only Flow Control loops and ifs) of LearningScala2.sc is:
 
- 	for (n <- 0 to 10) {
-		if (n < 2) {
-			println(n)
- 		}
-     else {
-      var ans = 0
-      var n1 = 0
-      var n2 = 1
-
-      var i = n - 1
-      while (i > 0) {
-        i = i - 1
-        ans = n1 + n2
-        n1 = n2
-        n2 = ans
-      }
-      println(ans)
-    } 
+ 	for (n <- 0 to 10) 
+	 {
+	   if (n < 2) 
+	   {
+		println(n)
+ 	   }
+     	    else
+	      {
+     		  var ans = 0
+     		  var n1 = 0
+      		  var n2 = 1
+      		  
+		  var i = n - 1
+      		  while (i > 0) 
+		  {
+        	    i = i - 1
+                    ans = n1 + n2
+        	    n1 = n2
+        	    n2 = ans
+      		  }
+                 println(ans)
+              }
+         }
 	 
 
