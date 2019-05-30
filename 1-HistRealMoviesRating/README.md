@@ -74,4 +74,8 @@ Give the:
   
   - Click Run
 
+**Interpreting the results**
 
+The results is the amount of movies have ranked by one, two, three ,four or five stars.
+
+![hist_mov_rat](https://user-images.githubusercontent.com/37953610/58642704-c7ab4700-82f5-11e9-9338-49d54dca720b.JPG)
