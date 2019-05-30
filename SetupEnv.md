@@ -90,9 +90,6 @@ change it for
   
   - 2- Type: cd c:\spark and type spark-shell. You will see the scala environment
   
-  ![spark-scala](https://user-images.githubusercontent.com/37953610/58599122-bec76080-8276-11e9-8335-6c4c2fa2f7f0.JPG)
-
- 
   - 3: rdd: resiliente distributed dataset
   
     Create a variable that build a small database where each row is a line that belongs to the file README.md
