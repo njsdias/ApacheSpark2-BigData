@@ -84,7 +84,7 @@ change it for
   
   - 4- Create a shortcut of exclipse.exe that uyou find inside of the folder c:\eclipse
   
- **6- Test your environment
+ **6- Test your environment**
  
   - 1- Open the windows terminal. Click in the windows logo and type _cmd_. Choose _Command Prompt_ and execute it as Administrator.
   
@@ -93,6 +93,14 @@ change it for
   ![spark-scala](https://user-images.githubusercontent.com/37953610/58599122-bec76080-8276-11e9-8335-6c4c2fa2f7f0.JPG)
 
  
-
-
+  - 3: rdd: resiliente distributed dataset
   
+    Create a variable that build a small database where each row is a line that belongs to the file README.md
+  
+        val rdd=sc.textFile("README.md")
+     
+     Check how many lines have the file or how many rows have the table
+      
+        rdd.count()
+
+     To quit press the _ctrl + d_
