@@ -1,10 +1,10 @@
-## Learning the basics
+# Learning the basics
 
 Here we are working with LearningScala1.sc to LearningScala4.sc files that you can be founded in [ScalaSpark folder](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/SparkScala).
 
 For use these files create a new project scala and import the files as you did in the previous [example](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/1-HistRealMoviesRating).
 
-# Types of variables and prints: LearningScala1.sc
+## Types of variables and prints: LearningScala1.sc
 
 So, here is only to write important notes.
 
@@ -26,7 +26,7 @@ The answer for the challenge of LearningScala1.sc is:
     val dmypi = 2 * pi                              //> dmypi  : Double = 6.2831853
     println(f"Pi is about $dmypi%.3f")              //> Pi is about 6,283
   
-# Flow Control: LearningScala2.sc
+## Flow Control: LearningScala2.sc
 
 
 The answer for the challenge (Fibonacci Sequence using only Flow Control loops and ifs) of LearningScala2.sc is:
