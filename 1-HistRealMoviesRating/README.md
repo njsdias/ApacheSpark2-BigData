@@ -14,7 +14,7 @@
   
   - 7- Project Name (for instance): SparkScalaCourse -> Press _Finish_
   
-  - 8- Inisde of Project Created: Right click on it and click . New -> Package -> com.orgname.projectname (i.e. com.sundogsoftware.spark)
+  - 8- Inside of Project Created: Right click on it and click . New -> Package -> com.orgname.projectname (i.e. com.sundogsoftware.spark)
       
      - You can choose any name for your package but read a litle about the convenctions for that 
      
@@ -24,7 +24,7 @@
   
   - Import the source code from your local system
   
-    - Chosse General -> File System 
+    - Choose General -> File System 
     
     - Select the folder fo Source Code that you saved it in a safe place.
     
@@ -34,7 +34,9 @@
     
     
     ## Fix the errors
-    
+ 
+ **1 - Library Errors**
+ 
     The erros that you will find are related to the missed libraries. Now you need to import the libraries.
     
 - Right click above of your project as you see in the next figure
@@ -43,5 +45,33 @@
     
 - Choose Proprieties -> Java Build Path -> Libraries -> Add External Jars
     
-  - Go to the folder where you installed the spark (c:\spark\jars). Press _ctrl + a_ to slect everything and click in _Open_
+  - Go to the folder where you installed the spark (c:\spark\jars). Press _ctrl + a_ to select everything and click in _Open_
   
+**2 - Incompablity Errors**
+
+After add external Jars you will see erros related with the incompability among version of Scala IDE and Scala version that you installed.
+
+**Important**: You need change the first code line to, before you run the configurations:
+
+      package com.orgname.projectname
+  
+
+ To fix the errors that do a right click above your project and choose:
+
+  - Proprieties -> Scala Compiler -> Fixed Scala Instalation: 2.11.11 (built-in) ------ in my case
+  
+**3- Run the program**
+
+Go to the main menu: Run -> Run Configurations... -> Scala Application (click on it).
+
+![run_menu](https://user-images.githubusercontent.com/37953610/58635526-06390580-82e6-11e9-9bd2-2515a0fd6006.jpg)
+
+Give the:
+
+  - Name: RatingsCounter
+
+  - Main Class: com.orgname.projectname
+  
+  - Click Run
+
+
