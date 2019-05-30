@@ -31,28 +31,4 @@ The answer for the challenge of LearningScala1.sc is:
 
 The answer for the challenge (Fibonacci Sequence using only Flow Control loops and ifs) of LearningScala2.sc is:
 
- 	for (n <- 0 to 10) 
-	 {
-	   if (n < 2) 
-	   {
-		println(n)
- 	   }
-     	    else
-	      {
-     		  var ans = 0
-     		  var n1 = 0
-      		  var n2 = 1
-      		  
-		  var i = n - 1
-      		  while (i > 0) 
-		  {
-        	    i = i - 1
-                    ans = n1 + n2
-        	    n1 = n2
-        	    n2 = ans
-      		  }
-                 println(ans)
-              }
-         }
-	 
-
+![fibonacci](https://user-images.githubusercontent.com/37953610/58652922-8b371580-830c-11e9-832a-0762786455a7.JPG)
