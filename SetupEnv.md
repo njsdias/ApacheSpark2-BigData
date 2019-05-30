@@ -104,3 +104,5 @@ change it for
         rdd.count()
 
      To quit press the _ctrl + d_
+     
+     ![spark-scala2](https://user-images.githubusercontent.com/37953610/58599657-27174180-8279-11e9-86cd-422859e51385.JPG)
