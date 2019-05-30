@@ -25,4 +25,23 @@
   - Import the source code from your local system
   
     - Chosse General -> File System 
+    
+    - Select the folder fo Source Code that you saved it in a safe place.
+    
+    - Select the Ratings Counter
+    
+    ![import_source_code](https://user-images.githubusercontent.com/37953610/58632722-5c09af80-82de-11e9-83f3-d7e2352e870a.jpg)
+    
+    
+    ## Fix the errors
+    
+    The erros that you will find are related to the missed libraries. Now you need to import the libraries.
+    
+- Right click above of your project as you see in the next figure
+    
+    ![import_libraries](https://user-images.githubusercontent.com/37953610/58633075-56f93000-82df-11e9-8a4f-e650fbff30eb.jpg)
+    
+- Choose Proprieties -> Java Build Path -> Libraries -> Add External Jars
+    
+  - Go to the folder where you installed the spark (c:\spark\jars). Press _ctrl + a_ to slect everything and click in _Open_
   
