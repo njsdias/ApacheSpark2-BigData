@@ -1,48 +1,38 @@
-# Learning the basics
+# Spark with examples
 
-Here we are working with LearningScala1.sc to LearningScala4.sc files that you can be founded in [ScalaSpark folder](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/SparkScala).
+Some notes:
 
-For use these files create a new project scala and import the files as you did in the previous [example](https://github.com/njsdias/ApacheSpark2-BigData/tree/master/1-HistRealMoviesRating).
-
-## Types of variables and prints: LearningScala1.sc
-
-So, here is only to write important notes.
-
-  - 1- The same code in scala-spark run most faster than in python-spark
+  - Spark - a fast and general engine for large-scale data processing
   
-  - 2- In Scala is high recommeded use IMMUTABLE variables (those which don't have values changed along the code)
+  - Spark is scalable: Runs in your laptop as well in a distributed cluster for parallel processing
   
-    - IMMUTABLE -> val namevariable = x
+  - Spark is 100x faster than Hadoop MaprReduce in memory or 10x faster on disk due to DAG (Directed Acyclic Graph) that optimizes workflows. Nothing is executed before you give the command.
+  
+  - RDD (Resilient Distributed Dataset): It is important when you are working with streaming data
+  
+  - Spark Core:  Spark Streaming + Sparl SQL + MLLib + GraphX
+  
+  - Spark itself is written in Scala
+  
+  - Functional Programming Model is a good fit for distributted processing
+  
+  - Python is slow in comparison
+  
+Simple code comparison between Python and Scala
+
+ -  Python
     
-    - MUTABLE -> var namevariable = x
-    
-   You can specify the type of the variable, but the scala is able to didentify it for you:
-   
-    var namevaribale: String = "Hello"
+        nums    = sc.parallelize([1,2,3,4])
+        squared = nums.map(lambda x: x*x).collect()
+        
+ - Scala
+ 
+        val nums    = sc.parallelize(List(1,2,3,4))
+        val squared = nums.map(x => x * x).collect()
 
-The answer for the challenge of LearningScala1.sc is:
-
-    val mypi = pi                                   //> mypi  : Double = 3.14159265
-    val dmypi = 2 * pi                              //> dmypi  : Double = 6.2831853
-    println(f"Pi is about $dmypi%.3f")              //> Pi is about 6,283
   
-## Flow Control: LearningScala2.sc
-
-
-The answer for the challenge (Fibonacci Sequence using only Flow Control loops and ifs) of LearningScala2.sc is:
-
-![fibonacci](https://user-images.githubusercontent.com/37953610/58652922-8b371580-830c-11e9-832a-0762786455a7.JPG)
-
-
-## Functions: LearningScala3.sc
-
-The challenge is write a function that converts a string to upper-case, and use that function of a few test strings.
-Then, do the same thing using a function literal instead of a separate, named function.
-Here, we are not interest in this type of challenges and you can find the solution searching on web.
-
-## Data Structures: LearningScala4.sc
-
-The challenge is to create a list of the numbers 1-20 and print out numbers that are evenly divisible by three. One of the solutions can be:
-
-![dividebythree](https://user-images.githubusercontent.com/37953610/58707823-e8cf6e80-83ad-11e9-8d9c-fd908f8fdec7.JPG)
-
+  
+  
+  
+  
+  
