@@ -32,7 +32,7 @@ This results in (33,(387,2)) => (33, 193.5)
 
   - 1: Copy the file fakefriendscsv to the project folder (C:\SparkScala)
   
-  - 2: Open the Eclipse. Select the project. Rihj«ght click above the packahe. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
+  - 2: Open the Eclipse. Select the project. Right click above the packahe. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
 
   - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
 
