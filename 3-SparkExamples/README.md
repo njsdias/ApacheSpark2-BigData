@@ -140,8 +140,13 @@ This results in (33,(387,2)) => (33, 193.5)
 ![code_ages2](https://user-images.githubusercontent.com/37953610/58717996-67370b00-83c4-11e9-940d-0cb24297d379.JPG)  
 
 
+**Run the project**
 
+  - 1: Copy the file fakefriendscsv to the project folder (C:\SparkScala)
+  
+  - 2: Open the Eclipse. Select the project. Rihj«ght click above the packahe. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
 
+  - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
 
   
   
