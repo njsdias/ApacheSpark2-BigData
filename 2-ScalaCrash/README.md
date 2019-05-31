@@ -32,3 +32,17 @@ The answer for the challenge of LearningScala1.sc is:
 The answer for the challenge (Fibonacci Sequence using only Flow Control loops and ifs) of LearningScala2.sc is:
 
 ![fibonacci](https://user-images.githubusercontent.com/37953610/58652922-8b371580-830c-11e9-832a-0762786455a7.JPG)
+
+
+## Functions: LearningScala3.sc
+
+The challenge is write a function that converts a string to upper-case, and use that function of a few test strings.
+Then, do the same thing using a function literal instead of a separate, named function.
+Here, we are not interest in this type of challenges and you can find the solution searching on web.
+
+## Data Structures: LearningScala4.sc
+
+The challenge is to create a list of the numbers 1-20 and print out numbers that are evenly divisible by three. One of the solutions can be:
+
+![dividebythree](https://user-images.githubusercontent.com/37953610/58707823-e8cf6e80-83ad-11e9-8d9c-fd908f8fdec7.JPG)
+
