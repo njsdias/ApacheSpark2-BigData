@@ -8,7 +8,7 @@ First we build a function that allows us to take the age and the numbFriends fro
 
 ![code_ages](https://user-images.githubusercontent.com/37953610/58717420-1a066980-83c3-11e9-9de9-cca199c65af8.JPG)
 
-Now we need write some expression that give us the total of friends that belongs to the persons that have the same age. The next figure tries to explain the main expressoins in two steps:
+Now we need write some expression that give us the total of friends that belongs to the persons that have the same age. The next figure tries to explain the main expressions in two steps:
 
   - First: Build a tuple with the (age,(numFriend,1))
   
@@ -30,9 +30,9 @@ This results in (33,(387,2)) => (33, 193.5)
 
 **Run the project**
 
-  - 1: Copy the file fakefriendscsv to the project folder (C:\SparkScala)
+  - 1: Copy the file fakefriends.csv to the project folder (C:\SparkScala)
   
-  - 2: Open the Eclipse. Select the project. Right click above the packahe. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
+  - 2: Open the Eclipse. Select the project. Right click above the package. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
 
   - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
 
