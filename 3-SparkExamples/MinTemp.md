@@ -1,6 +1,6 @@
 # Problem Definition. 
 
-For this exmaple follows the _MinTemperatures.scala_ file.
+For this example follows the _MinTemperatures.scala_ file.
 
 Here we are dealing with a dataset that have a feature which identify if the feature value is for TMIN, TMAX or PPRCP. The objective is extract the most miniminum TMIN per station ID. Next we can see a brief of the dataset.
 
