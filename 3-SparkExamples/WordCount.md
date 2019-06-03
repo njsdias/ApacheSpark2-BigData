@@ -86,11 +86,11 @@ So, first we **map** each word to a key/value pair (word,1) and after that we us
 
 Now, we want have most occurences words appears in the first place. For that we need use **sortByKey**. But now , the key is the value of the previius RDD instead of the word. 
 
-    val wordCounstSorted = wordCounts.map( x => (x._2, x._1)).sortByKey()
+    val wordCounstSorted = wordCounts.map( x => (x._2, x._1)).sortByKey(false)
 
 The results are:
 
-    the: 1292
-    your: 1420
-    to: 1828
     you: 1878
+    to: 1828
+    your: 1420
+    the: 1292
