@@ -1,38 +1,81 @@
 # Problem Definition
 
-Supose you have the data that are in the picture: id, name, age, numFriends.  In this example you see that you have two persons with the same age. The objective is sum up the number of friends of people have the same age and take the mean value: (385+2)/2
+Here the files that we need to guide our work are:
 
-![ages_prob](https://user-images.githubusercontent.com/37953610/58716834-ce06f500-83c1-11e9-907a-d7a24ac42309.jpg)
+- WordCount.scala
 
-First we build a function that allows us to take the age and the numbFriends from each row from a file that have data separated by comma. After that we read the content of the file that have all information. Next we build a RDD which stores only the age and the number of friends using the function that we construted for this purpose.
+- WordCountBetter.scala
 
-![code_ages](https://user-images.githubusercontent.com/37953610/58717420-1a066980-83c3-11e9-9de9-cca199c65af8.JPG)
+- WordCountBetterSorted.scala
 
-Now we need write some expression that give us the total of friends that belongs to the persons that have the same age. The next figure tries to explain the main expressions in two steps:
+## WordCount.scala
+First we need to remember is that a each row of our RDD is equivalent to one line of our text file.
 
-  - First: Build a tuple with the (age,(numFriend,1))
-  
-  - Second: Some the numFriend and the people (33,(387,2))
-  
-  - Third: Divide 387/2
-  
-        val averageByAge = totalsByAge.mapValues(x => x._1/ x._2)
+The **map()** transforms each element of an RDD into one new element. So, imagine we have the next sentence:
 
-This results in (33,(387,2)) => (33, 193.5)
+    The quick red fox jumped over lazy brown dogs
+    
+If we want transform all word in a Upper Case words we use **map** with the function **toUppercase**. 
 
-  - Last print the results:
-  
-        val results = averageByAge.collect()
-        results.sorted.foreach(println)
+    val lines    = sc.textFile("readfox.txt")
+    val rageCaps = lines.map(x=>toUpperCase)
+    
+We can do the same with **flatMap**. The flatMap puts each word of the senetence in one row of our RDD. So, the flatMap instead of returning a single value in the function you pass into it will **return a list** of values (with zero or many elements).
 
-![code_ages2](https://user-images.githubusercontent.com/37953610/58717996-67370b00-83c4-11e9-940d-0cb24297d379.JPG)  
+Using the next line of code:
 
+    val words = lines.flatMap(x=x.split(" "))   //splits word by space
+    
+we have:
 
-**Run the project**
+    The
+    quick
+    red
+    fox
+    jumped 
+    over 
+    the 
+    lazy 
+    brown 
+    dogs
+    
+If we are interest in know the occurences of each word we use **countByValue**
 
-  - 1: Copy the file fakefriends.csv to the project folder (C:\SparkScala)
-  
-  - 2: Open the Eclipse. Select the project. Right click above the package. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
+    val wordCounts = words.countbyValue()
+    wordCounts.foreach(println)
 
-  - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
+The results comes up some problems when identify a word, as we can see with the outpu (touch,,1 -> expansion.,1)
+
+    (touch,,1)
+    (of.,3)
+    (salesperson,5)
+    (Leeches,1)
+    (expansion.,1)
+    (rate,7)
+    (appropriate.,2)
+    
+ 
+## WordCountBetter.scala
+
+For have better results we need to improve the previous code. We identified some problems:
+
+-  word variants with capitalization, punctuation, etc.
+
+We now there are fancy antural language processing toolkits like NTLK. But we will keep it simple, and use a regular expression.
+
+In the next line of code split by word using the regular expression ("\\W+")
+
+    val words = input.flatMap(x => x.split("\\W+"))
+
+Normalize all words to lower case.
+
+    val lowercaseWords = words.map(x => x.toLowerCase())
+    
+Count of the occurrences of each word
+
+    val wordCounts = lowercaseWords.countByValue()
+    
+    
+    
+
 
