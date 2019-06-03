@@ -76,46 +76,4 @@ Take Thor for example. If you take this path we might say that he has three degr
 
 So how do we do that. Well we need to use a _search algorithm_ called **breadth first search**.
 
-So what we have here is basically a network graph in computer science terms. So imagine every one of these circles represents a super hero in our social graph and these lines represent
-
-00:02:07.920 --> 00:02:12.690
-the connections between them, you know the people that appear together in the same comic books and this
-
-00:02:12.690 --> 00:02:13.720
-example.
-
-00:02:14.250 --> 00:02:17.700
-So let's pretend this is what a social graph or a piece of the social graph looks like.
-
-00:02:17.700 --> 00:02:22.040
-And our social super hero network  illustrates different superheroes as circles.
-
-00:02:22.350 --> 00:02:27.660
-The lines represent connections between the superheroes and the number in the middle in this case infinity
-
-00:02:27.720 --> 00:02:31.370
-represents the distance from any given superhero that we start with.
-
-00:02:31.370 --> 00:02:34.680
-So let's say for example we want to start with superhero s.
-
-00:02:34.710 --> 00:02:36.890
-Maybe that represents Spider-Man.
-
-00:02:37.200 --> 00:02:42.140
-Well we want to end up with is a graph that indicates how many degrees separated from Spider-Man from
-
-00:02:42.150 --> 00:02:45.070
-node s as is every other node in this graph.
-
-00:02:45.090 --> 00:02:48.040
-So to do that we need some sort of approach some strategy.
-
-00:02:48.600 --> 00:02:51.860
-So lets start off with a couple of basic ideas here.
-
-00:02:51.870 --> 00:02:57.330
-First of all we are going to  come up with the idea of maintaining the state of a given node and it can be one
-
-00:02:57.330 --> 00:02:58.850
-of three colors.
+So what we have here is basically a network graph in computer science terms. So imagine every one of these circles represents a super hero in our social graph and these lines represent the connections between them, you know the people that appear together in the same comic books and this example. -> 00:02:14.250 
