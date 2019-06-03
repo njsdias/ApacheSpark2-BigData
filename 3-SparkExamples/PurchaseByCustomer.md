@@ -1,38 +1,45 @@
 # Problem Definition
 
-Supose you have the data that are in the picture: id, name, age, numFriends.  In this example you see that you have two persons with the same age. The objective is sum up the number of friends of people have the same age and take the mean value: (385+2)/2
+Find the the total amount spent by customer. The smaple contains: 
 
-![ages_prob](https://user-images.githubusercontent.com/37953610/58716834-ce06f500-83c1-11e9-907a-d7a24ac42309.jpg)
-
-First we build a function that allows us to take the age and the numbFriends from each row from a file that have data separated by comma. After that we read the content of the file that have all information. Next we build a RDD which stores only the age and the number of friends using the function that we construted for this purpose.
-
-![code_ages](https://user-images.githubusercontent.com/37953610/58717420-1a066980-83c3-11e9-9de9-cca199c65af8.JPG)
-
-Now we need write some expression that give us the total of friends that belongs to the persons that have the same age. The next figure tries to explain the main expressions in two steps:
-
-  - First: Build a tuple with the (age,(numFriend,1))
+ - custId, 
+ 
+ - itemID,
+ 
+ - amountSpent.
+ 
+ The objective is know how much each customer spent. 
+ 
+ Define a strategy:
+ 
+ - split each comma-delimited line into fields
+ 
+ - map each line to key/value pairs of customer ID and dollar amount
+ 
+ - use reduceByKey to add up amount spent by customer ID
+ 
+ - collect() the results and print them
   
-  - Second: Some the numFriend and the people (33,(387,2))
-  
-  - Third: Divide 387/2
-  
-        val averageByAge = totalsByAge.mapValues(x => x._1/ x._2)
+First we need create a new _Scala Object_ and give the name: _com.orgname.spark.PurchasebyCustomer_
 
-This results in (33,(387,2)) => (33, 193.5)
+Now lest's write some code.
 
-  - Last print the results:
-  
-        val results = averageByAge.collect()
-        results.sorted.foreach(println)
+- split each comma-delimited line into fields
 
-![code_ages2](https://user-images.githubusercontent.com/37953610/58717996-67370b00-83c4-11e9-940d-0cb24297d379.JPG)  
+      def extractCustomerPricePairs(line: String) = {
+        val fields = line.split(",")
+        (fields(0).toInt, fields(2).toFloat)
+      }
+      
+- map each line to key/value pairs of customer ID and dollar amount
+ 
+      val mappedInput = input.map(extractCustomerPricePairs)
 
+- use reduceByKey to add up amount spent by customer ID
 
-**Run the project**
+      val totalByCustomer = mappedInput.reduceByKey( (x,y) => x + y )
 
-  - 1: Copy the file fakefriends.csv to the project folder (C:\SparkScala)
-  
-  - 2: Open the Eclipse. Select the project. Right click above the package. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
-
-  - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
+- collect() the results and print them
+ 
+      val results = totalByCustomer.collect()
 
