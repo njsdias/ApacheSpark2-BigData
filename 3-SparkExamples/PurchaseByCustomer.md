@@ -43,3 +43,7 @@ Now lest's write some code.
  
       val results = totalByCustomer.collect()
 
+But we want th results sorted by amount of spent. so the key is the amount spent by customer and the custID is the value.
+
+    val flipped = totalByCustomer.map( x => (x._2, x._1) )
+    val totalByCustomerSorted = flipped.sortByKey(false)
