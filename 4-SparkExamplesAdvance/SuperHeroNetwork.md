@@ -32,16 +32,24 @@ For this example we will work with two files that come with the state. So we're 
 The Marvel-graphs.txt every line is just this big stream of numbers. And the way to interpret it is the _first number_ represents a given superhero and all the subsequent numbers represents all of the superheroes that appeared with that superhero in other comic books.
 We know that's the hero that we're talking about and it's followed by a list of all the heroes that appeared with that Hero.
 
-And to map those hero IDs to names we can do that with the Marvel-names.txt. So, for example you can see that Spider-Man is 5306. And actually he appears with whoever 4395 as in this example Spider-Man is pretty popular.
+And to map those hero IDs to names we can do that with the Marvel-names.txt. So, for example you can see that Spider-Man is 5306. And actually he appears with whoever 399 as in this example Spider-Man is pretty popular. But let's find out if he's actually the most popular.
 
-00:02:30.120 --> 00:02:33.210
-But let's find out if he's actually the most popular.
+In this first approach we need to see who is the most popular among the super heroes. For that we are define a strategy:
 
-00:02:34.050 --> 00:02:36.570
-So pretty simple straightforward problem here.
+- Map input data (heroID, number of co-occurences) per line
 
-00:02:36.600 --> 00:02:41.160
-Our high level strategy will be to parsing that input line one line at a time.
+- add up co.occurence by heroId using reduceByKey()
+
+- Flip (map) RDD to (number, heroID) 
+
+- Use max() on the RDD to find the hero with the most co-occurrences
+
+- Look up the name of the winner and display the result
+
+
+
+
+So pretty simple straightforward problem here. Our high level strategy will be to parsing that input line one line at a time.
 
 
 # SupeHero Network: Breadth First Search algorithm
