@@ -1,38 +1,113 @@
-# Problem Definition
+# SuperHero Network
 
-Supose you have the data that are in the picture: id, name, age, numFriends.  In this example you see that you have two persons with the same age. The objective is sum up the number of friends of people have the same age and take the mean value: (385+2)/2
+Here we want to track the connections between super heroes analysing data in comic books. 
 
-![ages_prob](https://user-images.githubusercontent.com/37953610/58716834-ce06f500-83c1-11e9-907a-d7a24ac42309.jpg)
+Someone actually went out and looked at every single Marvel comic book and kept track of all the superheroes that appear together within the same comic book. And what we're doing is we're treating those co appearances within comic books as social connections. So the fact that for example the Hulk and  Spider-Man appeared in the same comic might imply that they're friends if you will.
 
-First we build a function that allows us to take the age and the numbFriends from each row from a file that have data separated by comma. After that we read the content of the file that have all information. Next we build a RDD which stores only the age and the number of friends using the function that we construted for this purpose.
+Suppose one example where the Hulk appeared with Iron Man and The Hulk appeared with Thor but Thor only appeared with Iron Man.
+And you know how they were different comic books and maybe Spider-Man and The Hulk are connected by appearing in the same comic book, but let's pretend that Spider-Man and Thor never actually appeared in the same comic book totally made up social graph here. But it gives you a very simple example of what a social graph looks like and just like we can construct something like this in the context of superheroes who appeared with each other in the same comic books.
 
-![code_ages](https://user-images.githubusercontent.com/37953610/58717420-1a066980-83c3-11e9-9de9-cca199c65af8.JPG)
-
-Now we need write some expression that give us the total of friends that belongs to the persons that have the same age. The next figure tries to explain the main expressions in two steps:
-
-  - First: Build a tuple with the (age,(numFriend,1))
-  
-  - Second: Some the numFriend and the people (33,(387,2))
-  
-  - Third: Divide 387/2
-  
-        val averageByAge = totalsByAge.mapValues(x => x._1/ x._2)
-
-This results in (33,(387,2)) => (33, 193.5)
-
-  - Last print the results:
-  
-        val results = averageByAge.collect()
-        results.sorted.foreach(println)
-
-![code_ages2](https://user-images.githubusercontent.com/37953610/58717996-67370b00-83c4-11e9-940d-0cb24297d379.JPG)  
+![superheroes](https://user-images.githubusercontent.com/37953610/58820476-9cdd2d80-862a-11e9-93cd-a1469d56d92f.jpg)
 
 
-**Run the project**
+For this example we will work with two files that come with the state. So we're gonna work with what is called Marvel-graphs.txt, which contains the actual social graph itself in kind of a strange format. And then there's Marvel-names.txt, which just maps superhero IDs to their human readable names.
 
-  - 1: Copy the file fakefriends.csv to the project folder (C:\SparkScala)
-  
-  - 2: Open the Eclipse. Select the project. Right click above the package. Select Import... -> File Systems -> Select the folder C:\SparkScala (where you have the files for the course) -> Select FriendsByAge
+- Marvel.graphs.txt
 
-  - 3: Go to main menu RUN -> Run Configuration ... -> Click twice above _Scala Application_ -> Name: FriendsByAge -> Main Classe: com.orgname.spark.FriendsByAge -> Click in Run button
+      399 2548 3495 3556 4726 2664 403 400 4860 3994 3836 2650 3764 3765 3934 5467 4235 268 4232 2557 **5306** 2397 2144 6315 2399 4898 1127 5768 1929 5762 6313 5310 4318 6066 522 6306 1011 2669 2603 2449 5485 2040 3015 5194 5978 647 5232 3806 1587 64 5046 5131 2050 5709 5941 2561 5706 859 6206 508 4441 2213 5716 3373 3208 2354 154 5112 5294 4698 4511 1195 3974 2503 140 206 898 1886 2971 4398 4716 1289 4395 1365 4859 1965 
+      
+- Marvel-names.txt
 
+      5300 "SPENCER, TRACY"
+      5301 "SPERZEL, ANTON"
+      5302 "SPETSBURO, GEN. YURI"
+      5303 "SPHINX"
+      5304 "SPHINX II"
+      5305 "SPHINX III"
+      5306 "SPIDER-MAN/PETER PAR"
+      5307 "SPIDER-MAN III/MARTH"
+      5308 "SPIDER-MAN CLONE/BEN"
+      5309 "SPIDER-WOMAN/JESSICA"
+
+The Marvel-graphs.txt every line is just this big stream of numbers. And the way to interpret it is the _first number_ represents a given superhero and all the subsequent numbers represents all of the superheroes that appeared with that superhero in other comic books.
+We know that's the hero that we're talking about and it's followed by a list of all the heroes that appeared with that Hero.
+
+And to map those hero IDs to names we can do that with the Marvel-names.txt. So, for example you can see that Spider-Man is 5306. And actually he appears with whoever 4395 as in this example Spider-Man is pretty popular.
+
+00:02:30.120 --> 00:02:33.210
+But let's find out if he's actually the most popular.
+
+00:02:34.050 --> 00:02:36.570
+So pretty simple straightforward problem here.
+
+00:02:36.600 --> 00:02:41.160
+Our high level strategy will be to parsing that input line one line at a time.
+
+
+# SupeHero Network: Breadth First Search algorithm
+
+
+The main objective is find the degrees of separation between any two superheroes.
+And to do that we're going to introduce a concept called **breadth first search** which is a _computer science algorithm_ and illustrate how you can use Apache Spark to implement what might not seem at first to be something that lends itself to distributed processing but through some creative thinking you can take even complex algorithms like this and make a spark application out of them.
+
+
+So maybe you've heard the story that the actor Kevin Bacon is six degrees away from any other actor in Hollywood.
+That is if you look at the people that Kevin Bacon has appeared with in other films and the people that those people appeared with in other films and so on and so forth. Everyone's within six degrees of Kevin Bacon.
+
+The same is true of the superheroes in our superhero social network.
+You might be surprised at just how closely everyone is connected to say Superman and to get a little feeling of what I mean by Degrees of Separation.
+
+So in this example the Hulk and Spider-Man are one degrees of separation apart from each other because they have a direct connection.
+But for example Iron Man is **two degrees of separation** from Spider-Man because we have to go through the Hulk to find Iron Man.
+
+
+So for example to make it more concrete even the Hulk in Spider-Man may have appeared in the same comic book. But let's say that Spider-Man and Iron Man never did, but Iron Man and The Hulk did.Therefore they're two degrees of separation apart. 
+
+Take Thor for example. If you take this path we might say that he has three degrees of separation but we always talk about the shortest path So and in the case of Thor he would be two degrees of separation because they are connected by one person the Hulk. OK two steps to get to Thor.
+
+
+So how do we do that. Well we need to use a _search algorithm_ called **breadth first search**.
+
+So what we have here is basically a network graph in computer science terms. So imagine every one of these circles represents a super hero in our social graph and these lines represent
+
+00:02:07.920 --> 00:02:12.690
+the connections between them, you know the people that appear together in the same comic books and this
+
+00:02:12.690 --> 00:02:13.720
+example.
+
+00:02:14.250 --> 00:02:17.700
+So let's pretend this is what a social graph or a piece of the social graph looks like.
+
+00:02:17.700 --> 00:02:22.040
+And our social super hero network  illustrates different superheroes as circles.
+
+00:02:22.350 --> 00:02:27.660
+The lines represent connections between the superheroes and the number in the middle in this case infinity
+
+00:02:27.720 --> 00:02:31.370
+represents the distance from any given superhero that we start with.
+
+00:02:31.370 --> 00:02:34.680
+So let's say for example we want to start with superhero s.
+
+00:02:34.710 --> 00:02:36.890
+Maybe that represents Spider-Man.
+
+00:02:37.200 --> 00:02:42.140
+Well we want to end up with is a graph that indicates how many degrees separated from Spider-Man from
+
+00:02:42.150 --> 00:02:45.070
+node s as is every other node in this graph.
+
+00:02:45.090 --> 00:02:48.040
+So to do that we need some sort of approach some strategy.
+
+00:02:48.600 --> 00:02:51.860
+So lets start off with a couple of basic ideas here.
+
+00:02:51.870 --> 00:02:57.330
+First of all we are going to  come up with the idea of maintaining the state of a given node and it can be one
+
+00:02:57.330 --> 00:02:58.850
+of three colors.
