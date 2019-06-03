@@ -75,7 +75,22 @@ Count of the occurrences of each word
 
     val wordCounts = lowercaseWords.countByValue()
     
+## Scale Results    
+    
+Suppose we have a many any diffrent words in the book that is not be possible to allocate all in memory. So, we need to do it on a cluster in a distributed manner. The countByValue returns a scala map back where it maps words to their number of occurences. Now if you want to instead return an RDD that we can keep on the cluster we need reinvents how count by value works and return an RDD instead of a map. 
+
+    val wordCounts = lowercaseWords.map(x => (x,1)).reduceByKey((x,y) => x+y)
     
     
+So, first we **map** each word to a key/value pair (word,1) and after that we use **reduceByKey** to count the occorunce of each word.
 
+Now, we want have most occurences words appears in the first place. For that we need use **sortByKey**. But now , the key is the value of the previius RDD instead of the word. 
 
+    val wordCounstSorted = wordCounts.map( x => (x._2, x._1)).sortByKey()
+
+The results are:
+
+    the: 1292
+    your: 1420
+    to: 1828
+    you: 1878
