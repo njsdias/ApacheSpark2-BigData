@@ -138,6 +138,24 @@ And here we extract the name of this superheroe using **lookup** between _namesR
 The result is:
     
     CAPTAIN AMERICA is the most popular superhero with 1933 co-appearances.
+    
+    
+As exercise is purposed print out the Top 10 super heroes:
+
+     //Top 10
+    val sortedheroes = flipped.sortByKey(false)               //connection , heroID, descending order
+    val herotop = sortedheroes.take(10)                       // taking the 10 first
+    val mostTenPopularConID = herotop.map( x => (x._1,x._2))  //connection , heroID
+    
+    println()    
+    println("Top 10")
+    //print out
+    for ( x <- mostTenPopularConID) {
+      val mostPopularName2 = namesRdd.lookup(x._2)(0)
+      val connect = x._1
+      println(s"$mostPopularName2 has $connect co-appearances.") 
+    }
+   
 
 # SupeHero Network: Breadth First Search algorithm
 
