@@ -4,5 +4,15 @@ Here we will see more advance functionalities of Scala with some advanced exampl
 
 - Movielens: PopularMovies.scala , PopularMoviesNicer.scala
 
-- SuperHero Network: 
+- SuperHero Network: MostPopularSuperhero.scala , DegreesofSeparation.scala 
+
+  - lookup()
+  
+  - accumulator()
+
+- Movielens: Item-Based Collaboration Filter
+
+  - cache()
+  
+  - persiste()
 
