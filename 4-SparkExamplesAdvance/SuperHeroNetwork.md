@@ -181,4 +181,67 @@ Take Thor for example. If you take this path we might say that he has three degr
 
 So how do we do that. Well we need to use a _search algorithm_ called **breadth first search**.
 
-So what we have here is basically a network graph in computer science terms. So imagine every one of these circles represents a super hero in our social graph and these lines represent the connections between them, you know the people that appear together in the same comic books and this example. -> 00:02:14.250 
+So what we have here is basically a network graph in computer science terms. So, folowing the next figure, imagine every one of these circles represents a super hero in our social graph and these lines represent the connections between them, you know the people that appear together in the same comic books and this example. 
+
+![bfs-algorithm](https://user-images.githubusercontent.com/37953610/58894323-aed1d580-86e9-11e9-903c-8c947bf5d447.jpg)
+
+
+And our social super hero network  illustrates different superheroes as circles. The lines represent connections between the superheroes and the number in the middle in this case infinity represents the distance from any given superhero that we start with.
+
+So let's say for example we want to start with superhero s. Maybe that represents Spider-Man. Well we want to end up with is a graph that indicates how many degrees separated from Spider-Man from node s as is every other node in this graph.
+
+So to do that we need some sort of approach some strategy. So lets start off with a couple of basic ideas here.
+First of all we are going to  come up with the idea of maintaining the state of a given node and it can be one
+of three colors. Now White means that a node is completely unexplored by our algorithm. So we're starting off with everything being white as our initial state because nothing has been explored yet. Now we have other colors grey meaning that it needs to be explored and black meaning that it has been fully explored.
+
+So, the color represents the state of each superhero as we search through this graph. White means it hasn't been touched at all.
+Grey means it needs to be touched. And black means we're done with it. And inside each one we're going to keep track of the degrees of separation from some given character that we started with.
+
+So let's see how that works. So again our initial state we're going gonna start off saying we want to measure everyone's degrees
+of separation to this node. Notice maybe it's Spider-Man. So to do that we're going to color this first node grey meaning that it needs to be explored. And the initial degrees of separation will be zero because Spider-Man is 0 degrees away from Spider-Man because Spider-Man is Spider-Man. It makes sense so far. So what that gray indicates is that we need to explore all the connections of this node.
+
+![bfs-action1](https://user-images.githubusercontent.com/37953610/58895119-25230780-86eb-11e9-8633-da640f02b154.JPG)
+
+
+So we'll do that next. So by reaching out on the tendrils of that great node we're going to color these new connections grey me they need to connect to explore them as well and in the process I'm going to increment the degree count from 0 to 1 and store that in this new exploration here. So we've increased 0 to 1 and we've propagated that out to all the connections of the original node. Now we've colored that original node black meaning that we're done with it now we've already explored his connections. And now these two nodes are gray, meaning that they need to be explored further.
+
+![bfs-action2](https://user-images.githubusercontent.com/37953610/58895444-cf9b2a80-86eb-11e9-986f-dacc59d9989a.jpg)
+
+Now if we had a situation where there was already a number on one of these connections we would maintain the lowest connection count.
+Kind of like we showed before with the Hulk and or Spider-Man and Thor for example being connected through the Hulk.
+So we always maintain the shortest distance that we find and the darkest color. 
+
+So we then go out to split out this. No that was gray. We are now going from one to two in our depth and we will go out to its connections make them two because we're including that and color them gray. When you do the same for this left connection and that gets explored out and it goes there and we're done with these two nodes they get colored black so we know we're done with them. 
+
+So that's another iteration of the BFS algorithm.
+
+![bfs-action3](https://user-images.githubusercontent.com/37953610/58895712-754e9980-86ec-11e9-8171-92ef3a409c0e.JPG)
+
+So that's another iteration of the BFS algorithm. Basically we keep iterating through this process of exploring connections, coloring them gray incrementing the degree of separation count and then marking the node black that we actually processed.
+We just do this over and over and over again until we're done. 
+
+
+Now the nodes at right need to be explored all three of these nodes.
+So we'll see how that works here.
+These get branched out and we propagate out the next level of 3 out to there.
+
+![bfs-action4](https://user-images.githubusercontent.com/37953610/58895974-03c31b00-86ed-11e9-9fbc-149db84f0cf8.JPG)
+
+The node at left bottom doesn't have any connections so he's just going to turn black.
+We're done with that branch.
+And finally we'll explore any and explored connections of the other nodes.
+There aren't any so they end up going black as well and that is our final graph for degrees of separation
+from node s.
+
+![bfs-action5](https://user-images.githubusercontent.com/37953610/58896095-3240f600-86ed-11e9-8b4b-1c7e66ac24e9.JPG)
+
+
+So the way to interpret this look if you look at any given node.
+It already has the answer in there of how many degrees of separation am I from S ,and you can see we are one degree from between S and w. but from t to W. for example is 2.
+
+And again we preserve the shortest value there. You know you could actually do it through three hops if you really want to but two is the shortest path. And that's what breadth of research does that's how it works.
+
+
+
+
+
