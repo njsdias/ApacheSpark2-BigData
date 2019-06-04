@@ -51,9 +51,9 @@ So, we need to build a strategy to implement the Item-Based Collaborative Filter
   
 - Filter out duplicate pairs
   
-- Make the ovie pairs the key
+- Make the movie pairs the key
      
-  - map to (userID, ((moviesId1, rating1), (moviesId2, rating2))
+  - map to (userID, ((moviesId1 ,moviesId2), (rating1, rating2))
   
 - groupByKey() to get every rating pair found each movie pair
 
