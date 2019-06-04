@@ -6,13 +6,19 @@ Here we will see more advance functionalities of Scala with some advanced exampl
 
 - SuperHero Network: MostPopularSuperhero.scala , DegreesofSeparation.scala 
 
+  - Breadth First Search algorithm
+
   - lookup()
   
   - accumulator()
 
-- Movielens: Item-Based Collaboration Filter
+- Movielens: MovieSimilarities.scala
+
+  - Item-Based Collaboration Filter
 
   - cache()
   
   - persiste()
+  
+  - runing using Spark's Cluster Manager
 
