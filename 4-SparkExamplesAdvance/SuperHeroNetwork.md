@@ -1,4 +1,4 @@
-# SuperHero Network
+# SuperHero Network: MostPopularSuperhero.scala
 
 Here we want to track the connections between super heroes analysing data in comic books. 
 
@@ -46,11 +46,98 @@ In this first approach we need to see who is the most popular among the super he
 
 - Look up the name of the winner and display the result
 
+Our high level strategy will be to parsing that input line one line at a time. And since we don't really care about the actual individual connections for this problem we just want find out who's the most popular.
+
+All we care about is the total number of connections for each superhero. So we're going to look at each line of input data extract the superhero ID that's the first number though that we're talking about. And then just store the count the total number of other superheroes that appear with that super hero.
+
+Now remember these can span multiple lines so the same superhero idea might be broken up onto two or more of different lines so we need to combine them together somehow and **reduceByKey** will allow us to add up all the individual lines for a given superhero into one final result. From there we use the same sorting trick that we've used before. We're just going to flip that around so that the key is the count of how many friends you have and the value becomes the superhero ID.
+
+And then we can just call Max on the resulting RDD to find who has the most friends and friends again it's a proxy for coappearances in other comic books in this example. Then we can look up the name of the winner from Marvel-names.txt and display the result.
+
+If we click on the **marvel-graph.txt** and preview them you'll see that they are as I advertised Marvel graph again just
+a list of lines that have a bunch of numbers on them where each number represents a superhero ID.
+The first number is the hero we're talking about followed by a list of that hero's connections. We have **marvel-names.txt** which is mapping super hero IDs to their human readable names, where the names are enclosed in quotation marks.
 
 
+**Build up an RDD** that can map superhero IDs to superhero names. We can also build up an RDD and that will be automatically be available to every node near the cluster as well.
 
-So pretty simple straightforward problem here. Our high level strategy will be to parsing that input line one line at a time.
+So to do this we're going to call **flatMap** on the parseNames with the parseNames function that we defined. Remember in the marvel-names.txt each row is a number and a space and then within quotation marks the name of that character. But there is some invalidated data in here somewhere maybe there are some empty names maybe there is some blank lines. So we need to deal with all these different edge cases as well. And that's where a flat map comes in. So if there's a possibility of a line that we cannot successfully parse we only use something like a flat map so we have the option of returning nothing for a given line because it's not actually going to end up in our RDD. **So that's where we're calling flat map instead of map.**
 
+    // Build up a hero ID -> name RDD
+    val names = sc.textFile("../marvel-names.txt")
+    val namesRdd = names.flatMap(parseNames)
+
+**parseNames function**
+
+    // Function to extract hero ID -> hero name tuples (or None in case of failure)
+      def parseNames(line: String) : Option[(Int, String)] = {
+        var fields = line.split('\"')
+        if (fields.length > 1) {
+           return Some(fields(0).trim().toInt, fields(1))
+        } else {
+          return None // flatmap will just discard None results, and extract data from Some results.
+      }
+    }
+
+The input is a string of the Marvel names that textfile and the output is going to be an **option a scala, option of a tuple** of a superhero ID and the superhero name. Basically an option is a scala construct for saying you could have data where you might not have data in other languages. We have the concept of a null value or a nil value or something of that nature scala doesn't have that. Instead it has the concept of an option that wraps basically a value and you can have either an actual value returned as an option and that is a sum value which is a subclass of option or you can return a non-value which is also a subclass of option.
+So by returning an option you can return a sum which actually contains data or none which contains no data.
+
+And when you're using **flatMap** what will happen is that if you return a sum object it will say OK. We are gonna actually construct a line in the new RDD based on what's inside that some object but if it returns _None_ it will say _OK_ there's nothing actually to do here. I'm not going to create a new line at all in my resulting RDD.
+
+In resume: With this Option we can guarantee that each line of an RDD has data with the format that we defined in the function parseNames.
+
+This is the result from flatMap with parseNames function:
+
+      (18558,MARVEL MYSTERY COMIC)
+      (18559,HUMAN TORCH 4)
+      
+**For counting the superheroes** that are in a just line we defined a countCoOccurrences function. It is split the elements of each line with white spaces. The regular expression "w+" is for one white space. But the "s+" is a regular expression that means split
+it up based on whitespace. Whenever white spaces might be multiple spaces and might be tabs that might be tabs and spaces. We don't care just split up on whitespace please. The output of this function is the first number (superhero ID) and the amount of element that the line contains minus one. Because the first one id the superhero ID.
+
+    // Function to extract the hero ID and number of connections from each line
+    def countCoOccurences(line: String) = {
+      var elements = line.split("\\s+")
+      ( elements(0).toInt, elements.length - 1 )
+    }
+    
+Here we read the marvel-hraph.txt and map each line to extract the information that was defined on _countCoOccurences_ function.
+
+    // Load up the superhero co-apperarance data
+    val lines = sc.textFile("../marvel-graph.txt")
+    
+    // Convert to (heroID, number of connections) RDD
+    val pairings = lines.map(countCoOccurences)
+
+Next we use _reduceByKey_ to have (heroId, connections)
+
+    // Combine entries that span more than one line
+    val totalFriendsByCharacter = pairings.reduceByKey( (x,y) => x + y )
+
+And here we flip the information (connections, heroID)
+
+    // Flip it to # of connections, heroID
+    val flipped = totalFriendsByCharacter.map( x => (x._2, x._1) )
+
+Here we find the hero with most of connections:
+
+     // Find the max # of connections
+    val mostPopular = flipped.max()
+
+The result is:
+
+      (1933,859)   //connections, heroID
+
+And here we extract the name of this superheroe using **lookup** between _namesRdd_ and _mostPopular_.
+
+    // Look up the name (lookup returns an array of results, so we need to access the first result with (0)).
+    val mostPopularName = namesRdd.lookup(mostPopular._2)(0)
+    
+    // Print out our answer!
+    println(s"$mostPopularName is the most popular superhero with ${mostPopular._1} co-appearances.")
+     
+The result is:
+    
+    CAPTAIN AMERICA is the most popular superhero with 1933 co-appearances.
 
 # SupeHero Network: Breadth First Search algorithm
 
