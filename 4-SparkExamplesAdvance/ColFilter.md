@@ -1,5 +1,6 @@
 # Movielens: Item-Based Collaborative Filtering
 
+Introduce to: _cache()_, _persist()_
 
 Item based collaborative is an algorithm that's used for recommending any kinds of items.
 Basically the idea is we try to find relationships between items in this case between movies based on
@@ -35,5 +36,30 @@ In resume:
 - measure the similarity of theur ratings across all users who watached both
 
 - sort by movie, then by similarity strength
+
+To explain better how the Item-Based Collaborative Filtering can do, suposse you have three people: A, B, and C. The person A and B rated with 5 stars the movies X and Y and the person C rated with 5 stars only the movie Y. So, based in Item-Based Collaborative Filtering we can recommend the movie X to the person C that unknowns the existence of this movie. This recommendation is based in the fact the people A and B rated the movies X and Y in the same way and the probability the person C likes the movie X is high, because the movies X and Y are very well connected.
+
+So, we need to build a strategy to implement the Item-Based Collaborative Filtering algorithm:
+
+- Map input ratings to (userID, (moviesId, rating))
+
+- Find every movie pair rated by the same user
+
+  - This can be done with a "self-join" operation
+  
+  - At this point we have (userID, ((moviesId1, rating1), (moviesId2, rating2))
+  
+- Filter out duplicate pairs
+  
+- Make the ovie pairs the key
+     
+  - map to (userID, ((moviesId1, rating1), (moviesId2, rating2))
+  
+- groupByKey() to get every rating pair found each movie pair
+
+- Compute similarity between ratings for each movie in the pair
+
+- Sort, save and display resutls
+
 
 
