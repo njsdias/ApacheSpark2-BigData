@@ -241,7 +241,107 @@ It already has the answer in there of how many degrees of separation am I from S
 
 And again we preserve the shortest value there. You know you could actually do it through three hops if you really want to but two is the shortest path. And that's what breadth of research does that's how it works.
 
+# Breadth First Search algorithm: Implementation : DregreesofSeparation.scala
 
+We need to transform our dataset to adquate it to BFS algorithm using tuples into tuples (nested tuples).  For exmample, one line of Marvel-graph.txt is transformed from:
+
+      5983 1165 3836 4362 1282
+     
+ to
+ 
+      (5983, (1165, 3836, 4362, 1282), 9999, WHITE)
+ 
+
+So in this output tuple that we're going to put into our RDD for this data, the first entry in the list
+will be the superhero ID that we're talking about followed by another table that indicates the connections
+to that superhero.
+
+This next entry will indicate the degrees of separation from the person we care about.
+And initially we are going to set that to 9999, just to represent infinity.
+Ok really it should be infinity but infinity isn't really a number.
+So we'll use 9999 as a proxy.
+And finally the color of the node, which initially will be white meaning that it is unexplored entirely
+
+Here's the code that will do that.
+
+    def convertToBFS(line: String): BFSNode = {
+    
+       // Split up the line into fields
+       val fields = line.split("\\s+")
+    
+       // Extract this hero ID from the first field
+       val heroID = fields(0).toInt
+    
+       // Extract subsequent hero ID's into the connections array
+       var connections: ArrayBuffer[Int] = ArrayBuffer()
+       for ( connection <- 1 to (fields.length - 1)) {
+         connections += fields(connection).toInt  // a mutable object here because I need to keep adding stuff to it and
+                                                  // changing it as I go.
+       }
+    
+       // Default distance and color is 9999 and white
+       var color:String = "WHITE"
+       var distance:Int = 9999
+    
+       // Unless this is the character we're starting from
+       if (heroID == startCharacterID) {
+         color = "GRAY"
+         distance = 0
+       }
+       
+       /* I want using the two array object on my
+            array buffer to actually convert that
+            mutable array buffer to an immutable array */
+            
+       return (heroID, (connections.toArray, distance, color))
+    }
+
+Now we need iterate and update the information in each iteration.
+First we need to iterate to leave process the RDD just like was
+explained before where we go through one step at a time branching out on all the gray nodes coloring
+those nodes black and then updating the distance on those gray nodes accordingly.
+So we just go through looking for grey nodes to expand ,when we're done we color that black and we
+keep updating the distance as we expand our way out through the social graph.
+So we do this is by using a **mapper** and a **reducer** a map function and a reduce function in SPARK.
+
+**The mapper is responsible for:**
+
+- Creating new nodes for each connection of a given grey nodes, with a distance incrementede by one, color grey and no connections
+
+- Colors the gray node we jsut processed balack
+
+- Copies the nodes itself into the results
+
+
+**The reducer is responsible for**
+
+- Combines together all nodes for the same heroID
+
+- Preserves the shortest distance, and the darkes colour found
+
+- Preserves the list of connections from the original node.
+
+
+
+Any individual executor on our cluster might run across the character that we're looking for.
+So to do that we're going to use something called an **accumulator**. An accumulator is basically a shared
+object across the entire spark cluster that maintains a count of something or some sort of a state.
+And it just allows all your executor's to increment a shared variable across a whole clustered in a
+safe thread safe way. Syntactically we can set something up like this:
+
+      val hitCounter:LongAccumulator("Hit Counter")
+
+which set up a shared accumulator named "Hit Counter" with and initial value of 0.
+
+So what we're going to do each iteration if we run across a character that we're trying to find, will
+increment that hit counter accumulator. So all the executors will say okay increment that value from 0 to something else.
+
+If I run across this person and then the drivers can check this accumulator value through each iteration
+and say OK well if that hit counter accumulator is greater than zero then I know I found the person.
+And in fact that hit accumulator will actually contain the number of times that superhero was encountered.
+It might be more than one.
+It might have been reach from several different directions potentially. So that's how we're going to
+message back to the driver script that we actually found the person we're after using an accumulator.
 
 
 
