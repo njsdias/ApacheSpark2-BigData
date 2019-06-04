@@ -155,7 +155,10 @@ As exercise is purposed print out the Top 10 super heroes:
       val connect = x._1
       println(s"$mostPopularName2 has $connect co-appearances.") 
     }
-   
+  
+ The out put that I had was:
+ 
+ ![top10heroes](https://user-images.githubusercontent.com/37953610/58900232-af249d80-86f6-11e9-8d31-9b0437e42645.JPG)
 
 # SupeHero Network: Breadth First Search algorithm
 
