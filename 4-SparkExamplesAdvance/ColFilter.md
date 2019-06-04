@@ -62,4 +62,25 @@ So, we need to build a strategy to implement the Item-Based Collaborative Filter
 - Sort, save and display resutls
 
 
+In this particular example we're going introduce a new concept called **caching or persisting** your RDD's.
+And as we go through the code you'll see that we're going to produce an RDD of our final results and
+query it more than once. Any time you do that **if you're performing more than one action on the same RDD**, you need to explicitly
+tell SPARK to **cache that RDD** so it doesn't go off and try to **recreate it from scratch the second time
+around.**
+
+**Remember** if you create an RDD, run one action on it and then another action on that same RDD it might go off and
+recreate it again. To prevent that we have this cache function or persist function that you can use to make sure that it keeps a copy of
+that RDD around. So if you need it later on in the script again it can go back to that copy of it instead of recreating
+it all from scratch.
+
+
+What's the **difference** between **cache and persist**?
+
+- Persist gives you the option to cache it to disk 
+
+- cache gives you the option to cache just to memory.
+
+So if you want to deal with if you're worried about **fault tolerance and nodes** you know failing on  and
+be able to **recover from that as quickly as possible** _persist_ might be a better choice but obviously it
+requires more resources to to get to that state. 
 
