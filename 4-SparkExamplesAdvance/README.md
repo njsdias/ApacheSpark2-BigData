@@ -12,7 +12,7 @@ Here we will see more advance functionalities of Scala with some advanced exampl
   
   - accumulator()
 
-- Movielens: MovieSimilarities.scala
+- ColFil: MovieSimilarities.scala
 
   - Item-Based Collaboration Filter
 
@@ -21,4 +21,3 @@ Here we will see more advance functionalities of Scala with some advanced exampl
   - persiste()
   
   - runing using Spark's Cluster Manager
-
