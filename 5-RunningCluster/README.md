@@ -380,7 +380,7 @@ Once you are in your cluster terminal first you need to copy that over from S3. 
 
       aws s3 cp s3://mainfolder/ml-1m/movies.dat ./
       
-      aws s3 cp s3://mainforlder/MovieSimilarities1M.jar ./
+      aws s3 cp s3://mainfolder/MovieSimilarities1M.jar ./
 
 - run : if you remember right this script requires a command line parameter, the movie Id we're interested in finding similarities for us so I happen to know that Star Wars is 260 in the 1 million dataset.
 
@@ -428,46 +428,44 @@ Now there are a certain list of commands you can do operations on RDD that will 
 So you want to make sure that things are properly partitioned before going in there.
 
 
-And another important point is that once you specify a partitioning on an RDD that partitioning will
-be preserved in the result of that RDD operation too.
-
-
-So if I do a groupByKey on a partitioned RDD, the result that I get back will be partitioned in the
-same way and that's an important optimization because remember stages are broken up by the need to shuffle
-data.
-So if I had the same number of tasks in each step of my operations here I don't need to shuffle between
-those two.
-
-
+And another important point is that once you specify a partitioning on an RDD that **partitioning will
+be preserved in the result of that RDD operation too.** So if I do a groupByKey on a partitioned RDD, the result that I get back will be partitioned in the same way and that's an important optimization because remember stages are broken up by the need to shuffle data. So if I had the same number of tasks in each step of my operations here I don't need to shuffle between those two.
 So it can actually reduce the number of shuffles that you have to do in or in your script and that's
-an important optimization.
-So any time you can partition and preserve that partitioning through a chain of commands that will help
-your script run even faster.
+an important optimization. So **any time you can partition and preserve** that partitioning through a chain of commands that **will help
+your script run even faster.**
 
+So I had to choose the **right partition size.** You basically want to make sure that
+you **at least have as many partitions as you will have executors on your cluster** and you might not know
+ahead of time how big your cluster will be. Otherwise you're going to have these executors and these resources on your cluster just sitting idle and that wouldn't be good either. So make sure you have at least as many prop as many partitions as you have the capacity for executors on your cluster. 
 
-So I had to choose the right partition size.
-Well it's a little bit of guesswork to be honest but like I said you basically want to make sure that
-you at least have as many partitions as you will have executors on your cluster and you might not know
-ahead of time how big your cluster will be.
-
+One hundred is usually a reasonable place to start if you don't want to think about too much.
+You know that's indicative of you know a reasonably sized cluster and that will give you pretty good
+parallelism in most use cases.
 
 So you just kind of have to make an educated guess sometimes.
 Now you don't want to have too many partitions because that can actually result in too much shuffling
 of the data if you have to split it up into too many different tasks that run in parallel.
 You know distribute computing isn't a perfect per is not perfectly efficient.
-So more distribution more parallelism isn't always better.
+**So more distribution more parallelism isn't always better.**
 
 
-This usually a sweet spot to be found but you want to have at least as many partitions as you have executors
-otherwise you're going to have these executors and these resources on your cluster just sitting idle
-and that wouldn't be good either.
+So if you go back and look at the actual code for our 1 million ratings movie similarity script, you
+can see that we have this movie pairs RDD that we're going to do a groupByKey operation on here and
+groupByKey is one of those operations that benefits from partitioning.
+
+    // Now key by (movie1, movie2) pairs.
+    val moviePairs = uniqueJoinedRatings.map(makePairs).partitionBy(new HashPartitioner(100))
+
+    // We now have (movie1, movie2) => (rating1, rating2)
+    // Now collect all ratings for each movie pair and compute similarity
+    val moviePairRatings = moviePairs.groupByKey()
+
+So to make sure that's well distributed we're taking this uniqueJoinedRatings RDD mapping it and taking
+the result of that and partitioning it into 100 partitions.
+
+So the syntax here is partition by and then you pass in a partitioner object which we create hash partitioner
+is one you'll typically use. And 100 means I want 100 partitions. The resulting RDD, will also have 100 partitions and that will
+get filtered down into groupByKey which will now have a nice partitioned RDD to deal with.
+And you can do that very efficiently and in a very quick distributed manner and that part of that is why that script was able to complete as quickly as it did.
 
 
-So make sure you have at least as many prop as many partitions as you have the capacity for executors
-on your cluster.
-One hundred is usually a reasonable place to start if you don't want to think about too much.
-You know that's indicative of you know a reasonably sized cluster and that will give you pretty good
-parallelism in most use cases.
-
-00:03:49.830 --> 00:03:51.090
-And that's what we did here.
