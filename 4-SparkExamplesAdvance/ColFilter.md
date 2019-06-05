@@ -84,3 +84,8 @@ So if you want to deal with if you're worried about **fault tolerance and nodes*
 be able to **recover from that as quickly as possible** _persist_ might be a better choice but obviously it
 requires more resources to to get to that state. 
 
+# Runing using Spark's Cluster Manager
+
+- Right Click on package and choose: Export... -> Java -> Jar File. Choose the folder where you are saving the course and give the name MovieSims.jar
+
+![cluster_run](https://user-images.githubusercontent.com/37953610/58922882-d732f180-8734-11e9-9f2a-01b952f8b42a.jpg)
