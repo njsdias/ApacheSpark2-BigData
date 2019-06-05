@@ -255,7 +255,7 @@ For this example, extract the folder _sbt_ that is in the SparkScala folder in t
 
       addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
       
- After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message. If you go to the _sbt_ folder you will find a new folder that was created automatically by the compile process named _target_ and inside of that you will see a folder with the name _scala-2.11_ (it is my dependy in my case) and inseide of that you wil find the jar file : _Moviesimilarities1M-assembly-1.0.jar_
+ After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message. If you go to the _sbt_ folder you will find a new folder that was created automatically by the compile process named _target_ and inside of that you will see a folder with the name _scala-2.11_ (it is my dependy in my case) and inseide of that you wil find the jar file : _Moviesimilarities1M-assembly-1.0.jar_ . And that is my Spark drivers script that I can run from a real cluster.
  
 ![sbt-1](https://user-images.githubusercontent.com/37953610/58965982-5e21b180-87a9-11e9-9e2c-c49def6ce7a8.jpg)
  
@@ -263,4 +263,110 @@ For this example, extract the folder _sbt_ that is in the SparkScala folder in t
 
 ![sbt-3](https://user-images.githubusercontent.com/37953610/58966538-60384000-87aa-11e9-84a0-3792017b286e.JPG)
 
+ ## Introduction to Amazon Elastic MapReduce (EMR)
  
+Here we're going to actually run our 1 million movie rating script on
+a real cluster using Amazon's **Elastic Map Reduce** service and **Hadoop**.
+
+About how **distributed SPARK** actually works so **the same scripts you've been using to run these SPARK
+jobs locally on your own PC can be used on a cluster without much modification.**
+So it's kind of up to spark-submit and SPARK itself to figure out what cluster manager you're running
+on top of and that might be Spark's built in **cluster manager** could be Hadoop's **Yarn**, it could be **Mesos**
+and integrate with that to actually distribute the work of all your mappers and reducers as well as
+it can across the cluster that you have available to you. 
+
+So basically the **spark driver** script is running on your master node your driver. And that communicates with your **cluster manager** to actually **distribute out the work** that's in that driver script **to different executor nodes, workers**. And the **cluster manager is then responsible for** dealing with failures of any individual nodes and getting
+the results back together to get back to your driver script when it's done.
+
+ ![spark-cluster-1](https://user-images.githubusercontent.com/37953610/58966826-e6ed1d00-87aa-11e9-84e2-8cd990b0d68e.JPG)
+
+**Spark-submit Parameters** 
+
+And first I should note that on a lot of clusters a lot of these settings are going **to be preconfigured
+for you automatically.**
+So if you don't specify anything in your script explicitly for, what the Master is going to be or if
+it's not being specified on the command line there is also a configuration file within SPARK that can
+be set up to set all of these things for you automatically.
+And for example if you set up a cluster on Amazon Elastic MapReduce a lot of these things will be set
+up for you in an optimal manner.
+
+But sometimes you run into issues where things don't complete you run out of resources things, start
+timing out and you need to tweak these things a little bit to get things to run more reliably so you
+need to know they exist.
+
+- --master
+
+     - yarn : for running a YARN/HADOOP cluster
+     
+     - hostname:port : for conecting to a master on a Spark standalone cluster
+     
+     - mesos://masternode:port
+     
+     - If you have a sparkconf for anything in your script itself that overrides, that it will ignore what's on the command line. So the  hierarchy: 1- your script; 2-command line; 3-the configuration files for spark. So never forget to double check your scripts to make sure that you're not hard coding a given master. For example if you have that local bracket star that will override the master option here and if you were to run that script on a cluster they wouldn't take advantage of the full cluster.
+     
+- --num-executors
+
+     - Must set explicitly with YARN, only 2 by default
+     
+- --executor-memory
+
+    - You want to make sure that does not exceed the physical memory available to each individual executor node. If you're running on a cluster in the cloud those are often virtual machines that have less memory than
+you might think. So make sure you are aware of the memory available to your script on each executor.
+   
+- --total-executors-cores
+
+    - If you have multi cores on your virtual nodes then you might want to tweak that to actually put an upper limit on how many cores your script can consume.
+
+
+**Amazon Elastic MapReduce**
+
+In Amazon EMR it's easy to spin up the Hadoop cluster
+and you can actually tell it to pre-install spark on it.
+With everything automatically configured so very easy way to get started and run your script on a real
+cluster where you just rent time and pay for what you need.
+
+
+That's kind of the whole premise of Amazon Web Services, you just rent time and **pay** for the computing
+resources that you actually need for whatever you're doing.
+So you're charged basically by the hour
+instances, how much time you're spending on how many computers of a given type.
+And you're also charged for any network IO and any storage space and any storage IO as well so you **pay**
+for what you use.
+
+Do be careful to unless you got some corporate account or something
+where it's not your money on the line because if you mess up it's very easy to forget to terminate your
+cluster when you're done. And if you do that your cluster will just keep on running forever even though you're not using it and
+you're going to be billed for all that time and you might not even realize it until you see a **credit
+card charge for a thousand euros.** So you know if you want to fiddle around with EMR remember to **terminate your clusters when you're done.**
+
+But again what do you and are sets up for you is a Hadoop cluster and you can **run Spark on top** of the
+**Yarn component of Hadoop** so people kind of conflict,I do.
+
+And Hadoop and sometimes I hear a lot of people talk about how SPARK is faster than Hadoop but it's
+not really one or the other. What they really mean is **SPARK is faster than MapReduce** which is a way of running distributed jobs
+on Hadoop, but **Hadoop itself is just a technology for managing a cluster** and one component of Hadoop is Yarn,
+the cluster manager which SPARK can run on top of just fine. So, Hadoop and SPARK are not mutually exclusive which is a common misconception.
+
+**Best pratices for running in clusters**
+One other thing I want to point out too in terms of best practices, because **running on a real cluster
+is expensive.**
+These are expensive resources that you're dealing with here potentially.
+You always want make sure you're **doing your development and testing locally on your own PC first**. or some desktop computer or some single computer that you have access to you that doesn't cost a lot of money. In a way to do that **often is to use a subset of your data just to develop with.**
+
+So **if you're dealing with a big data set** that you can only manage on a cluster **consider using just a
+piece of that data set** to develop and test with. And that way you're more likely to have a successful run when you're actually renting time on the cluster itself. You really want to **minimize the amount of time you're working on the cluster** if possible.
+
+**Amazon Web Services account**
+To set up you need to start out by:
+
+- creating an Amazon Web Services account
+      
+- Create an EC2 key pair and download the .pem file
+      
+- On Windows, you'll need a terminal like Putty or MobaXterm
+
+    - For Putty, need to convert the .pem to a .ppk private key file
+      
+There are many youtube videos on internet that we can watch and learn the details. Here the objective is to ask your attention to the details of running a spark file (jar) on clusters.
+
+
