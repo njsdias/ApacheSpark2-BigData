@@ -357,6 +357,7 @@ So **if you're dealing with a big data set** that you can only manage on a clust
 piece of that data set** to develop and test with. And that way you're more likely to have a successful run when you're actually renting time on the cluster itself. You really want to **minimize the amount of time you're working on the cluster** if possible.
 
 **Amazon Web Services account**
+
 To set up you need to start out by:
 
 - creating an Amazon Web Services account
