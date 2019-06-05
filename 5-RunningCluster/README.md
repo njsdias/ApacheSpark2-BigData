@@ -244,3 +244,20 @@ So, it is a little bit different way of setting up your SPARK context when you'r
 cluster with that was packaged up using SBT.
 
 
+For this example, extract the folder _sbt_ that is in the SparkScala folder in this repository. Copy this folder into a safe localization in your computer. Do not forget to change the configurations of the files in according with your spark and scala version. In my case I needed make some changes in the 
+
+- build.sbt: From 2.0.0 to 2.3.0 after checked the spark version with the command _spark-submit --version_ in comand line terminal.
+
+      libraryDependencies ++= Seq(
+      "org.apache.spark" %% "spark-core" % "2.3.0" % "provided"
+      
+- assembly.sbt that is in _sbt/project_ folder. I changed fom 0.14.3 to 0.14.6
+
+      addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
+      
+ After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message.
+ 
+ ![sbt-1](https://user-images.githubusercontent.com/37953610/58965982-5e21b180-87a9-11e9-9e2c-c49def6ce7a8.jpg)
+ 
+ ![sbt-2](https://user-images.githubusercontent.com/37953610/58966033-798cbc80-87a9-11e9-9339-04970f71e428.JPG)
+ 
