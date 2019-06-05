@@ -255,10 +255,12 @@ For this example, extract the folder _sbt_ that is in the SparkScala folder in t
 
       addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.6")
       
- After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message.
+ After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message. If you go to the _sbt_ folder you will find a new folder that was created automatically by the compile process named _target_ and inside of that you will see a folder with the name _scala-2.11_ (it is my dependy in my case) and inseide of that you wil find the jar file : _Moviesimilarities1M-assembly-1.0.jar_
  
 ![sbt-1](https://user-images.githubusercontent.com/37953610/58965982-5e21b180-87a9-11e9-9e2c-c49def6ce7a8.jpg)
  
 ![sbt-2](https://user-images.githubusercontent.com/37953610/58966167-b2c52c80-87a9-11e9-93ce-4a4178cef917.JPG)
+
+![sbt-3](https://user-images.githubusercontent.com/37953610/58966538-60384000-87aa-11e9-84a0-3792017b286e.JPG)
 
  
