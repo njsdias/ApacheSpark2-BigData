@@ -257,7 +257,8 @@ For this example, extract the folder _sbt_ that is in the SparkScala folder in t
       
  After this modifications run the command _sbt assembly_ inside of the folder _sbt_. If all is done well you will receive a Sucess Message.
  
- ![sbt-1](https://user-images.githubusercontent.com/37953610/58965982-5e21b180-87a9-11e9-9e2c-c49def6ce7a8.jpg)
+![sbt-1](https://user-images.githubusercontent.com/37953610/58965982-5e21b180-87a9-11e9-9e2c-c49def6ce7a8.jpg)
  
- ![sbt-2](https://user-images.githubusercontent.com/37953610/58966033-798cbc80-87a9-11e9-9339-04970f71e428.JPG)
+![sbt-2](https://user-images.githubusercontent.com/37953610/58966167-b2c52c80-87a9-11e9-93ce-4a4178cef917.JPG)
+
  
