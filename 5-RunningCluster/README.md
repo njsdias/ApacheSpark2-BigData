@@ -368,6 +368,8 @@ To set up you need to start out by:
 
     - For Putty, need to convert the .pem to a .ppk private key file
       
-There are many youtube videos on internet that we can watch and learn the details. Here the objective is to ask your attention to the details of running a spark file (jar) on clusters.
+There are many youtube videos on internet that we can watch and learn the details. Here the objective is to ask your attention to the details of running a spark file (jar) on clusters. But s usually I give you a step-by-step guide to follow: 
+      
+      https://andrewrgoss.com/projects/mov_sim_ml_1m_emr/
 
 
