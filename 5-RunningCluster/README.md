@@ -387,3 +387,87 @@ Once you are in your cluster terminal first you need to copy that over from S3. 
       spark-submit --class com.compname.spark.MovieSimilarities1M MovieSimilarities1M.jar 260
       
 At the end do no forget to **Terminate your cluster to save your money.**   
+
+## Optimizing for Running on a Cluster: PARTITIONING
+
+In the file MovieSimilarities1M.scala we have the next line of code:
+
+    // Now key by (movie1, movie2) pairs.
+    val moviePairs = uniqueJoinedRatings.map(makePairs).partitionBy(new HashPartitioner(100))
+
+And now we are discuss the particular word _HashPartitioner()_. 
+
+In MovieSimilarities1M we have to do a little bit of tuning of the script to get it to run reliably.
+That's where partitionBy comes in.
+So for one thing that's **self-join operation** we did was pretty expensive. SPARK can't necessarily partition
+that idealy on its own. 
+
+    // Self-join to find every combination.
+    val joinedRatings = ratings.join(ratings)
+    
+And there's also a **group by operation** that's got a further take the results of all those movie pairs
+and group them all together at one point in the script that also needs to be efficiently distributed .
+
+    // Now collect all ratings for each movie pair and compute similarity
+    val moviePairRatings = moviePairs.groupByKey()
+
+So by using their partition by operator on an RDD we can say explicitly I want you to take this operation
+and break it up into this many tasks.
+
+So remember Spark actually breaks down your script.
+The DAG if you will based on stages between where and used to shuffle data and each stage is broken
+up into individual tasks that are distributed to each node of your cluster each executor that you have.
+So you want to **make sure that you always have at least as many partitions as you have executor's.**
+That way you can split up the job efficiently.
+
+
+Now there are a certain list of commands you can do operations on RDD that will benefit from partitioning
+
+- Join(), cogroup(), groupWith(), join(), leftOuterJoin(), reduceByKey(), combineByKey(), lookup()
+
+So you want to make sure that things are properly partitioned before going in there.
+
+
+And another important point is that once you specify a partitioning on an RDD that partitioning will
+be preserved in the result of that RDD operation too.
+
+
+So if I do a groupByKey on a partitioned RDD, the result that I get back will be partitioned in the
+same way and that's an important optimization because remember stages are broken up by the need to shuffle
+data.
+So if I had the same number of tasks in each step of my operations here I don't need to shuffle between
+those two.
+
+
+So it can actually reduce the number of shuffles that you have to do in or in your script and that's
+an important optimization.
+So any time you can partition and preserve that partitioning through a chain of commands that will help
+your script run even faster.
+
+
+So I had to choose the right partition size.
+Well it's a little bit of guesswork to be honest but like I said you basically want to make sure that
+you at least have as many partitions as you will have executors on your cluster and you might not know
+ahead of time how big your cluster will be.
+
+
+So you just kind of have to make an educated guess sometimes.
+Now you don't want to have too many partitions because that can actually result in too much shuffling
+of the data if you have to split it up into too many different tasks that run in parallel.
+You know distribute computing isn't a perfect per is not perfectly efficient.
+So more distribution more parallelism isn't always better.
+
+
+This usually a sweet spot to be found but you want to have at least as many partitions as you have executors
+otherwise you're going to have these executors and these resources on your cluster just sitting idle
+and that wouldn't be good either.
+
+
+So make sure you have at least as many prop as many partitions as you have the capacity for executors
+on your cluster.
+One hundred is usually a reasonable place to start if you don't want to think about too much.
+You know that's indicative of you know a reasonably sized cluster and that will give you pretty good
+parallelism in most use cases.
+
+00:03:49.830 --> 00:03:51.090
+And that's what we did here.
