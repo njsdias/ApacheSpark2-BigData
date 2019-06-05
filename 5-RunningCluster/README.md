@@ -372,4 +372,18 @@ There are many youtube videos on internet that we can watch and learn the detail
       
       https://andrewrgoss.com/projects/mov_sim_ml_1m_emr/
 
+## Into Amazon Cluster
 
+Once you are in your cluster terminal first you need to copy that over from S3. EMR any AWS ec2 node has a set of utilities built. First verify if you are in /home/hadoop with _pwd_ command. After that:
+
+- copy
+
+      aws s3 cp s3://mainfolder/ml-1m/movies.dat ./
+      
+      aws s3 cp s3://mainforlder/MovieSimilarities1M.jar ./
+
+- run : if you remember right this script requires a command line parameter, the movie Id we're interested in finding similarities for us so I happen to know that Star Wars is 260 in the 1 million dataset.
+
+      spark-submit --class com.compname.spark.MovieSimilarities1M MovieSimilarities1M.jar 260
+      
+At the end do no forget to **Terminate your cluster to save your money.**   
