@@ -468,4 +468,6 @@ is one you'll typically use. And 100 means I want 100 partitions. The resulting 
 get filtered down into groupByKey which will now have a nice partitioned RDD to deal with.
 And you can do that very efficiently and in a very quick distributed manner and that part of that is why that script was able to complete as quickly as it did.
 
+## Best Practices for Running on a Cluster
+
 
