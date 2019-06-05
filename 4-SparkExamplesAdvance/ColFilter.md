@@ -98,3 +98,13 @@ requires more resources to to get to that state.
 
 ![cluster_run3](https://user-images.githubusercontent.com/37953610/58923655-71486900-8738-11e9-9a07-828dd525a268.jpg)
 
+# Improve the results
+
+- Discard bad ratings - only recommend good movies
+
+- Try different similarity metrics: Pearson Correlation Coefficient, Jaccard Coefficient, Conditional Probability
+
+- Adjust the thresholds for minimum co-raters or minimum score
+
+- Use genre informatoin in u.items to boost scores from movies in the same genre
+
