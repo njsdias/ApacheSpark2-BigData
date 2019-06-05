@@ -39,19 +39,33 @@ on your master node and use the spark-submit command to actually execute that dr
 **Notes**
 
 - What's special about spark-submit versus running in the IDE?
- 
- First of all spark-submit wraps the entire process of kicking off your script and maintaining it so
-we can actually integrate with the cluster manager and figure out, OK how do I distribute the script
-out to the entire cluster.
+
+   - First of all spark-submit wraps the entire process of kicking off your script and maintaining it so
+we can actually integrate with the cluster manager and figure out. 
+
+   - The other good thing too is that by packaging things into a jar  file that's just Java bytecode we can run this script on any operating system that supports java. So we can develop on Windows like we're doing here, upload that jar file to a Linux cluster and
+use spark-submit on that Linux cluster and it will work just fine.
+   
+   - Another thing that's good about spark-submit is that it's something you can run from a command line
+   
+- How do I distribute the script out to the entire cluster?
 
 - How do they integrate with the cluster manager to actually make sure that my job is actually distributed
 and reliable?
 
 - How do I make sure my RDD's are really are indeed reliable and distributed?
 
-So there is a -- jar's option for example where you can specify a path to any jar files for other scala packages or Java packages that your code might depend on that isn't part of the core scala or SPARK packages themselves. 
+So there is a **-- jars** option for example where you can specify a path to any jar files for other scala packages or Java packages that your code might depend on that isn't part of the core scala or SPARK packages themselves. 
 
 So for example you might have an add on library for integrating Spark
 with some other system like Kafka or you know flume or something like that you might need a series of
 jar files to actually enable that functionality in your script and you can use the dash dash jars
 option to actually say okay here's where you can find that jar file.
+
+You can also tell to automatically distribute a set of files alongside your script.
+So if you use the **-- files** option, if you have some small data file that might be a reasonable way
+to make sure that it's available to every node on your cluster.
+
+
+So you can actually **kick off** this script **periodically** using a cron job on an actual Linux cluster or
+you know **Nagios** whatever you use to actually schedule jobs in a real production system. So you can't really do that with an IDE right and a graphical user interface. You need to be able to actually execute these commands from a command line prompt from OS level.
