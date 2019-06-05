@@ -187,7 +187,7 @@ Kick it off and that's all you need to do.
 
 To **Install SBT** go to the scala-sbt.org website and click download MSI and the installation is standard Windows Installer.
 
-**Example with SBT build**
+## Example with SBT build
 
 Import into your package the MovieSimilarities1M.scala file. As we have a new version of the data set extracted from grouplens.org/datasets/movielens/ (MovieLens 1M Dataset released 2/2003) we have modified our mappers that parse out the information to take into account the new file names and new delimiters that we have.
 So we're looking for movies.dat now and a colon colon delimiter (::) here will be different.
@@ -318,7 +318,7 @@ you might think. So make sure you are aware of the memory available to your scri
     - If you have multi cores on your virtual nodes then you might want to tweak that to actually put an upper limit on how many cores your script can consume.
 
 
-**Amazon Elastic MapReduce**
+## Amazon Elastic MapReduce
 
 In Amazon EMR it's easy to spin up the Hadoop cluster
 and you can actually tell it to pre-install spark on it.
@@ -347,7 +347,7 @@ not really one or the other. What they really mean is **SPARK is faster than Map
 on Hadoop, but **Hadoop itself is just a technology for managing a cluster** and one component of Hadoop is Yarn,
 the cluster manager which SPARK can run on top of just fine. So, Hadoop and SPARK are not mutually exclusive which is a common misconception.
 
-**Best pratices for running in clusters**
+## Best pratices for running in clusters
 One other thing I want to point out too in terms of best practices, because **running on a real cluster
 is expensive.**
 These are expensive resources that you're dealing with here potentially.
@@ -356,7 +356,7 @@ You always want make sure you're **doing your development and testing locally on
 So **if you're dealing with a big data set** that you can only manage on a cluster **consider using just a
 piece of that data set** to develop and test with. And that way you're more likely to have a successful run when you're actually renting time on the cluster itself. You really want to **minimize the amount of time you're working on the cluster** if possible.
 
-**Amazon Web Services account**
+## Amazon Web Services account
 
 To set up you need to start out by:
 
