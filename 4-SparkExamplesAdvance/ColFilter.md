@@ -93,6 +93,8 @@ requires more resources to to get to that state.
 - To run ising the Spark's Cluster Manager, open the command line (cmd) and go to inside of the folder that yu are saving the course and type:
 
       spark-submit --class com.orgname.spark.MovieSimilarities MovieSims.jar 50
-      
-![cluster_run2](https://user-images.githubusercontent.com/37953610/58923165-62f94d80-8736-11e9-8193-ba90e9744466.jpg)
+ 
+- **Note:** Doing the same on python the code needs 15 minutes to complete and with scala only few seconds. 
+
+![cluster_run3](https://user-images.githubusercontent.com/37953610/58923655-71486900-8738-11e9-9a07-828dd525a268.jpg)
 
