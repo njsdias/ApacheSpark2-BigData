@@ -58,7 +58,7 @@ and reliable?
 So there is a **-- jars** option for example where you can specify a path to any jar files for other scala packages or Java packages that your code might depend on that isn't part of the core scala or SPARK packages themselves. 
 
 So for example you might have an add on library for integrating Spark
-with some other system like Kafka or you know flume or something like that you might need a series of
+with some other system like **Kafka** or you know **Flume** or something like that you might need a series of
 jar files to actually enable that functionality in your script and you can use the dash dash jars
 option to actually say okay here's where you can find that jar file.
 
@@ -69,3 +69,5 @@ to make sure that it's available to every node on your cluster.
 
 So you can actually **kick off** this script **periodically** using a cron job on an actual Linux cluster or
 you know **Nagios** whatever you use to actually schedule jobs in a real production system. So you can't really do that with an IDE right and a graphical user interface. You need to be able to actually execute these commands from a command line prompt from OS level.
+
+## Packaging with SBT
