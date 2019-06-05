@@ -89,3 +89,10 @@ requires more resources to to get to that state.
 - Right Click on package and choose: Export... -> Java -> Jar File. Choose the folder where you are saving the course and give the name MovieSims.jar
 
 ![cluster_run](https://user-images.githubusercontent.com/37953610/58922882-d732f180-8734-11e9-9f2a-01b952f8b42a.jpg)
+
+- To run ising the Spark's Cluster Manager, open the command line (cmd) and go to inside of the folder that yu are saving the course and type:
+
+      spark-submit --class com.orgname.spark.MovieSimilarities MovieSims.jar 50
+      
+![cluster_run2](https://user-images.githubusercontent.com/37953610/58923165-62f94d80-8736-11e9-8193-ba90e9744466.jpg)
+
