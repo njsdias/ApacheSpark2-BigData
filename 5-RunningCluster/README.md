@@ -578,12 +578,77 @@ very very rude awakening at the end of the month because AWS bills you monthly a
 - Remember to terminate your cluster when you're done.
 
 
+## Troubleshooting Custer Jobs
+
+- Your master will run a console on porto 4040
+
+     - But in EMR, it's next to impossible to actually connect to it from outside
+     
+     - If you have your own cluster running on your own network, life's a little easier in that respect
+     
+In command line:
+
+      spark-submit --class com.orgname.spark.MovieSimilarities1M MovieSims.jar 50
+
+In web browser to access Spark UI: this allow you to see in more detail the jobs of your spark
+
+      127.0.0.1:4040
 
 
+You can actually go into individual stages as well.
+So you can see how Spark actually broke up the job in individual stages here and you can visualize
+those stages independently too.
+So this is great for optimizing your script.
 
 
+You know do you have more stages than you think you need.
+**Remember** stages represent points at which SPARK needs to shuffle data.
+So the more stages you have the more data is being shuffled around to the least efficient.
+Your job is running so there could be opportunities to explicitly partition things to **avoid shuffling
+and reduce the number of stages** and by studying what's going on here that can be a useful way of figuring
+it out.
 
 
+Also we have the executors tab here that's actually telling you how many executors are actually running
+and just running on my local desktop.
+Now if you were running on a cluster and you were looking at this and you saw only one executor, Well
+that would be a **sign of trouble.**
+Maybe you left something in the configuration on the script itself to run locally or restrict the number
+of executors. So the spark ui is just one piece of the troubleshooting pie.
+
+As we said **logs can also be really helpful**
+and oftentimes you can just look at the output that's scrolling by as your job runs on the master note
+to see what's going on something's failing. You know go back to those partitioning slides through and through and see if there are opportunities to explicitly partition some of the operations you're doing like Joine or Groupby to make your job
+more run more efficiently. If not you might just need to throw more hardware at the problem.
+
+
+- Logs
+
+     - In standalone mode, they're in the web UI
+     
+     - Im YARN though, the logs are distributed. You need to collect them after the fact using yarn logs --aplicationID <app ID>
+      
+ - While your driver script runs, it will log errors like executors failling to isse heartbeats
+ 
+     - This generally mean you are asking too much of each executor
+     
+     - You may need more of them - more machines in your cluster
+     
+    - Each executor may need more memory
+    
+    - Or use partitioBY() to demand less work from individual executors by small partitions.
+  
+- Remember your executors aren't necesssarily on the same box as your drive script
+
+- Use broadcast variables to share data outside of RDD's
+
+- Need some Java or Scala package that's not pre-loaded on EMR?
+
+     - Bundle them into your Spark JAR with sbt assembly
+     
+     - Or use --jars with spark-submit to add individual libraries that are on the master
+     
+     - Try to just avoid using obscure packages you don't need it in the first place. Time is money on your cluster and you're better of not fidding with it
 
 
 
