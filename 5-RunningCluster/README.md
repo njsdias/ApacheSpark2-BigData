@@ -470,4 +470,128 @@ And you can do that very efficiently and in a very quick distributed manner and 
 
 ## Best Practices for Running on a Cluster
 
+So the main thing that we did was we would make sure to use an empty default sparkConf object in our script
+was sort of this hierarchy of configuration settings **where one will override the other.**
+
+And if anything is in your script where you are hard coding a setting into your spark config object that's
+going to take precedence over everything else. So if you left you know a master of local in your sparkConfig 
+in a script **that's going to override everything else** on your cluster and your script will just
+run locally on your master node. That's not what you want.
+
+So remember to leave that empty. The next layer is going to be the actual command parameters to spark-submit.
+And if you specify something on the **command line** that will **override the configuration files for Spark
+itself.**
+
+Now the nice thing about something like **Elastic MapReduce (EMR)** or properly configured hadoop cluster that
+has sparked pre-installed is that you're likely to have the optimal configuration settings already in
+the configuration files for Spark itself.
+
+So when you spin up an EMR cluster you don't have to tell it to run on yarn and Hadoop and all that
+stuff. You don't have to tell it what other machines are available in your cluster just knows.
+And usually that's how it'll work for you.
+
+But if you do need to overwrite things you can still do so on the spark-submit and that command line.
+So for example you might have a really challenging job that has really big partitions for some reason
+and maybe your cluster is actually struggling to keep up with it because it's exceeding the memory usage
+of an individual executor.
+So if you try to if you're not distributing your data well enough and that can be a result of poor partitioning
+or just not having enough machines in your cluster you can start to get executors failing because they're
+running out of memory you just asking them to do too much for an individual process.
+So for an example you might end up passing in --executor-memory one gigabyte or something
+as a parameter to your script when you watch it and that will tell spark-submit.
+Actually wanted to make sure you have at least one gigabyte of RAM allocated to each executor and distribute
+things accordingly. Now that will override anything in your configuration.
+
+But if you had an executor memory setting hardcoded in your script, that command line option would do
+nothing. So just **remember that hierarchy** what's in your script takes precedence over the spark-submit in that command
+line, which takes precedence over the configuration files of SPARK itself.
+
+Now another thing that you might need to specify is the master.
+Now when I say thing again about Elastic MapReduce, that this comes pre-configured.
+But if you do need to specify that by hand you can tell Spark I mean explicitly what to use for its
+master. And if you say yarn, that tells it I'm just gonna be running on top of the yarn cluster manager,
+that's part of Hadoop or it might be Mesos, it might be a specific node that represents the master
+node of Spark's built in cluster manager. So, again this will usually be set up for you ahead of time as part of the configuration.
+But if it looks like things aren't being distributed properly you might need to set that all right.
+So master is used to actually specify the master node of your cluster manager or the cluster manager
+that you're running on top of.
+
+If you have scripts and data in someplace and you don't have a permanent cluster that's running all the
+time make sure that you upload those someplace where you can quickly download them to your cluster.
+Once you've started spinning it up remember **time is money on Elastic MapReduce.** So you want to be able
+to download the scripts and data that your script needs as quickly as possible.
+I did that by uploading my scripts and the look up file to Amazon's S3 service and then I could quickly
+use the aws s3 command on my Master know to copy those into place so I could actually run them
+from my master node. Obviously you want to make sure that your data itself is also someplace accessible in some distributed
+file store.
+
+So I put the actual movie ratings data itself the one million movie rating dataset
+on s3 as well.And I refer to that using S3 and within my script to actually read that data from S3.
+Now in the real world you might be using HDFS or something instead.
+Whatever **you know whatever distributed file system** you want to use.
+
+And once you have that all in place all you need to do is figure out how to log into the master node
+of your cluster. Once it's been spun up and we walk through how to do that with the EMR it's just right there and the
+dashboard for you and you can use putty to connect, copy over the jar file that you want to execute.
+And along with any files that you need to support that jar file. Run spark-submit with it and off it
+goes. 
+
+And the most important thing **if you're actually running on a shared cluster** where you're actually renting
+time like Amazon Elastic map reduce, remember to **terminate your cluster when you're done** you are being
+billed by the hour by the machine and also for any storage space you consume.
+So if you forget and you leave your cluster running and you don't terminate when you're done and you
+don't stick around to make sure that it actually terminated you your bank account could be in for a
+very very rude awakening at the end of the month because AWS bills you monthly and I can assure you
+**running a large cluster for a month can get very very expensive.**
+
+
+**In resume**
+
+- Use use an empaty, defuatl SparkConfig in your driver - this way we'll use the defaults EMR sets up instead, as welll as any command line options you pass into spark -submit for your master node
+
+- If executores start failing, you mar need to adjust the memory each executor has,. For example:
+      
+      spark-submit --executor-memory 1g MovieSimilarities1M.py 260
+
+(from the master node of our clusters)
+
+- Can use --master yarn to run on a YARN cluster
+
+- EMR sets this up by default
+
+- Get your script & dta somplace where EMR can access them easily
+
+     - AWS's S3 is a good choice - just use s3n://URL's when specifying file paths, and make sure your file premissions make them accessible
+     
+- Spin up an EMR cluster to Spark using the AWS console
+
+     - Billing starts now!!
+     
+- Get the external DNS name for the master node, and log into it using the "hadoop" user account and your private key file
+
+- Copy your driver program's JAR file and any files it needs
+
+     - using aws s3 cp s3://bucket-name/filename ./
+   
+- Run spark submit and watch the output
+
+- Remember to terminate your cluster when you're done.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
